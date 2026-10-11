@@ -1,6 +1,7 @@
 body {
   margin: 0;
   overflow: hidden;
+  user-select: none;
 }
 
 .cauldron {
@@ -24,33 +25,38 @@ body {
   background: #ff0000;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: transparent;
+  -webkit-text-fill-color: transparent;
   mix-blend-mode: color-burn;
   opacity: var(--heat-ratio);
+  transition: opacity 0.1s ease-in-out;
 }
 
 .ingredients {
   position: absolute;
   bottom: 240px;
-  width: 100vw;
+  width: 100%;
   margin: 0 auto;
   isolation: isolate;
   text-align: center;
   font-size: 24px;
+  touch-action: manipulation;
 }
 
 .ingredient {
+  display: inline-block;
   padding: 0;
-  border: none;
   background: transparent;
   font: inherit;
   line-height: 1;
   cursor: pointer;
+  transition: transform 0.1s ease-in-out;
 }
 
-.ingredient:hover {
-  transform: scale(1.1);
+@media (hover: hover) and (pointer: fine) {
+  .ingredient:hover {
+    transform: scale(1.1);
+  }
 }
 
 .ingredient:active {

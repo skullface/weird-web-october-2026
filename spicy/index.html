@@ -2,7 +2,7 @@
   <head>
     <title>wwo spicy</title>
 
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://weirdweboctober.website/">
     <link rel="octo:octothorpes" href="Layers">
@@ -18,11 +18,11 @@
       <span class="cauldron-heat">🍲</span>
     </div>
     <div class="ingredients">
-      <button type="button" class="ingredient" data-ingredient="salt">🧂</button>
-      <button type="button" class="ingredient" data-ingredient="tomato">🍅</button>
-      <button type="button" class="ingredient" data-ingredient="pepper">🌶️</button>
-      <button type="button" class="ingredient" data-ingredient="garlic">🧄</button>
-      <button type="button" class="ingredient" data-ingredient="onion">🧅</button>
+      <div class="ingredient" role="button" tabindex="0" data-ingredient="salt">🧂</div>
+      <div class="ingredient" role="button" tabindex="0" data-ingredient="tomato">🍅</div>
+      <div class="ingredient" role="button" tabindex="0" data-ingredient="pepper">🌶️</div>
+      <div class="ingredient" role="button" tabindex="0" data-ingredient="garlic">🧄</div>
+      <div class="ingredient" role="button" tabindex="0" data-ingredient="onion">🧅</div>
     </div>
 
     <script>
@@ -33,20 +33,30 @@
       let chilies = 0;
       const cauldron = document.querySelector(".cauldron");
 
-      document.querySelectorAll(".ingredient").forEach((button) => {
-        button.addEventListener("click", () => {
-          const emoji = button.textContent.trim();
-          const rect = button.getBoundingClientRect();
-          const x = rect.left + rect.width / 2;
-          const y = rect.top + rect.height / 2;
-          spawnSprinkle(emoji, x, y);
+      function activateIngredient(element) {
+        const emoji = element.textContent.trim();
+        const rect = element.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        spawnSprinkle(emoji, x, y);
 
-          if (button.dataset.ingredient === "pepper") {
-            chilies = Math.min(chilies + 1, MAX_HEAT);
-          } else {
-            chilies = Math.max(chilies - 1, 0);
+        if (element.dataset.ingredient === "pepper") {
+          chilies = Math.min(chilies + 1, MAX_HEAT);
+        } else {
+          chilies = Math.max(chilies - 1, 0);
+        }
+        cauldron.style.setProperty("--heat", chilies);
+      }
+
+      document.querySelectorAll(".ingredient").forEach((element) => {
+        element.addEventListener("click", () => {
+          activateIngredient(element);
+        });
+        element.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activateIngredient(element);
           }
-          cauldron.style.setProperty("--heat", chilies);
         });
       });
 
