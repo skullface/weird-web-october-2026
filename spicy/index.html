@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>wwo spicy</title>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://weirdweboctober.website/">
+    <link rel="octo:octothorpes" href="Layers">
+
+    <meta property="og:title" content="wwo spicy">
+    <meta property="og:description" content="wwo spicy">
+
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="cauldron">
+      <span class="cauldron-pot">🍲</span>
+      <span class="cauldron-heat">🍲</span>
+    </div>
+    <div class="ingredients">
+      <button type="button" class="ingredient" data-ingredient="salt">🧂</button>
+      <button type="button" class="ingredient" data-ingredient="tomato">🍅</button>
+      <button type="button" class="ingredient" data-ingredient="pepper">🌶️</button>
+      <button type="button" class="ingredient" data-ingredient="garlic">🧄</button>
+      <button type="button" class="ingredient" data-ingredient="onion">🧅</button>
+    </div>
+
+    <script>
+      const SPRINKLE_COUNT = 12;
+      const FALL_MS = 600;
+      const MAX_HEAT = 12;
+
+      let chilies = 0;
+      const cauldron = document.querySelector(".cauldron");
+
+      document.querySelectorAll(".ingredient").forEach((button) => {
+        button.addEventListener("click", () => {
+          const emoji = button.textContent.trim();
+          const rect = button.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          spawnSprinkle(emoji, x, y);
+
+          if (button.dataset.ingredient === "pepper") {
+            chilies = Math.min(chilies + 1, MAX_HEAT);
+          } else {
+            chilies = Math.max(chilies - 1, 0);
+          }
+          cauldron.style.setProperty("--heat", chilies);
+        });
+      });
+
+      function spawnSprinkle(emoji, x, y) {
+        for (let i = 0; i < SPRINKLE_COUNT; i++) {
+          const sprinkle = document.createElement("span");
+          sprinkle.className = "ingredient-sprinkle";
+          sprinkle.textContent = emoji;
+          sprinkle.style.left = `${x}px`;
+          sprinkle.style.top = `${y}px`;
+          sprinkle.style.fontSize = `${12 + Math.random() * 24}px`;
+
+          // 360º multiplied by sprinkle counter, divided by the number of sprinkles
+          // plus a random offset between 0 to 1 radian (not a perfect circle)
+          const angle =
+            (Math.PI * 2 * i) / SPRINKLE_COUNT + Math.random();
+          // distance from center the sprinkle travels along the angle
+          const spread = 35 + Math.random() * 70;
+          // how far the sprinkle travels horizontally along the angle
+          const sprinkleX = Math.cos(angle) * spread;
+          // how far the sprinkle travels vertically along the angle
+          // plus “gravity” (always push down 50px and add random vertical offset)
+          const sprinkleY = Math.sin(angle) * spread * 0.4 + 50 + Math.random() * 90;
+
+          sprinkle.style.setProperty("--sprinkleX", `${sprinkleX}px`);
+          sprinkle.style.setProperty("--sprinkleY", `${sprinkleY}px`);
+          sprinkle.style.animationDuration = `${FALL_MS}ms`;
+
+          document.body.appendChild(sprinkle);
+          sprinkle.addEventListener("animationend", () => sprinkle.remove());
+        }
+      }
+      </script>
+  </body>
+</html>

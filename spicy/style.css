@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.cauldron {
+  --heat: 0;
+  --heat-ratio: calc(var(--heat) / 12);
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  font-size: 200px;
+  display: inline-grid;
+  isolation: isolate;
+}
+
+.cauldron-pot,
+.cauldron-heat {
+  grid-area: 1 / 1;
+}
+
+.cauldron-heat {
+  background: #ff0000;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  mix-blend-mode: color-burn;
+  opacity: var(--heat-ratio);
+}
+
+.ingredients {
+  position: absolute;
+  bottom: 240px;
+  width: 100vw;
+  margin: 0 auto;
+  isolation: isolate;
+  text-align: center;
+  font-size: 24px;
+}
+
+.ingredient {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ingredient:hover {
+  transform: scale(1.1);
+}
+
+.ingredient:active {
+  transform: scale(0.98);
+}
+
+.ingredient-sprinkle {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: sprinkle var(--duration, 400ms) ease-out forwards;
+}
+
+@keyframes sprinkle {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: 
+      translate(calc(-50% + var(--sprinkleX)),
+      calc(-50% + var(--sprinkleY)))
+      scale(0.35);
+    opacity: 0;
+  }
+}
